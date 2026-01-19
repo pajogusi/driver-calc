@@ -48,8 +48,8 @@ function save() {
 }
 
 // ---------- PRO ----------
-const PAYPAL_URL = "const PAYPAL_URL = "https://www.paypal.me/calculadora1970/2";
-"; // <-- mete o teu link
+const PAYPAL_URL = "https://www.paypal.me/calculadora1970/2"
+
 
 // Hash do código DC2-WEEK01 (já confirmado por ti)
 const PRO_CODE_HASHES = [
