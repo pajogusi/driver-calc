@@ -153,14 +153,6 @@ async function handleUnlock(){
     return;
   }
 
-  // ⚠️ MODO TESTE (para não ficares preso): se ainda não meteste hashes,
-  // podes desbloquear com UNLOCK-ME. Depois apaga isto.
-  if (PRO_CODE_HASHES.length === 0 && code === "UNLOCK-ME"){
-    setProUnlocked(true);
-    if (input) input.value = "";
-    return;
-  }
-
   const h = await sha256Hex(code);
   const ok = PRO_CODE_HASHES.includes(h);
 
@@ -174,7 +166,7 @@ async function handleUnlock(){
       status.textContent = "Invalid code.";
     }
   }
-}
+  }
 
 function wireProUI(){
   const unlockBtn = byId("btnUnlock");
