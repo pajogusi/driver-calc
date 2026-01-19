@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Driver Calc (MVP)</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    body { margin: 0; background: #0b0c10; color: #e8e8e8; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+    .top { display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    .brand { display:flex; gap:10px; align-items:center; }
+    .dot { width:12px; height:12px; border-radius:999px; background:#00d1b2; display:inline-block; }
+    .card { background:#12141a; border:1px solid #222634; border-radius:16px; padding:14px; box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+    .grid { display:grid; gap:12px; grid-template-columns: 1.2fr .8fr; }
+    @media (max-width: 860px){ .grid{ grid-template-columns:1fr; } }
+    h1 { font-size: 18px; margin: 0; }
+    h2 { font-size: 14px; margin: 0 0 10px; opacity: .9; letter-spacing:.2px; }
+    label { font-size: 12px; opacity: .85; display:block; margin-bottom:6px; }
+    input, select, button {
+      width:100%;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid #2a3042;
+      background:#0e1016;
+      color:#e8e8e8;
+      outline:none;
+    }
+    input::placeholder { color:#7f879b; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    @media (max-width: 520px){ .row{ grid-template-columns:1fr; } }
+    button { cursor:pointer; border:1px solid #33405a; background:#121a2a; }
+    button.primary { background:#0f2f2a; border-color:#1f6b60; }
+    button.danger { background:#2a1212; border-color:#6b1f1f; }
+    button:disabled { opacity:.55; cursor:not-allowed; }
+    .pill { display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid #2a3042; border-radius:999px; background:#0e1016; }
+    .kpis { display:grid; grid-template-columns: repeat(4, 1fr); gap:10px; }
+    @media (max-width: 860px){ .kpis{ grid-template-columns:1fr 1fr; } }
+    .kpi { padding:10px; border-radius:14px; background:#0e1016; border:1px solid #20263a; }
+    .kpi .v { font-size:18px; font-weight:700; }
+    .kpi .t { font-size:12px; opacity:.8; }
+    .ok { color:#38d39f; }
+    .bad { color:#ff6b6b; }
+    .muted { opacity:.8; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:10px 8px; border-bottom:1px solid #20263a; font-size: 12px; }
+    th { opacity:.85; font-weight:600; }
+    .right { text-align:right; }
+    .tiny { font-size:11px; opacity:.8; }
+    .lock { display:flex; gap:10px; align-items:center; justify-content:space-between; }
+    .locked { opacity:.7; }
+    .footer { margin-top: 12px; opacity:.75; font-size:12px; }
+    .link { color:#6db7ff; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <span class="dot"></span>
+        <div>
+          <h1 id="ui_title">Driver Calc (MVP)</h1>
+          <div class="tiny" id="ui_sub">Fast order profitability + simple log (local only)</div>
+        </div>
+      </div>
+
+      <div class="pill">
+        <span class="tiny" id="ui_lang">Language</span>
+        <select id="langSel" style="width:auto; padding:8px 10px;">
+          <option value="en">EN</option>
+          <option value="pt">PT</option>
+          <option value="es">ES</option>
+          <option value="fr">FR</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid" style="margin-top:12px;">
+      <!-- LEFT -->
+      <div class="card">
+        <h2 id="ui_calc">Order calculator</h2>
+
+        <div class="row">
+          <div>
+            <label id="ui_pay_label">Order pay (£)</label>
+            <input id="pay" type="number" step="0.01" placeholder="e.g. 7.50" />
+          </div>
+          <div>
+            <label id="ui_time_label">Order time (minutes)</label>
+            <input id="mins" type="number" step="1" placeholder="e.g. 20" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label id="ui_dist_label">Distance (miles)</label>
+            <input id="miles" type="number" step="0.1" placeholder="e.g. 4.2" />
+          </div>
+          <div>
+            <label id="ui_cost_label">Cost per mile (£)</label>
+            <input id="cpm" type="number" step="0.01" placeholder="e.g. 0.25" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:10px;">
+          <div>
+            <label id="ui_fixed_label">Fixed cost per order (£) (optional)</label>
+            <input id="fixed" type="number" step="0.01" placeholder="e.g. 0.30" />
+          </div>
+          <div>
+            <label id="ui_target_label">Minimum £/hour target</label>
+            <input id="target" type="number" step="0.1" placeholder="e.g. 10" />
+          </div>
+        </div>
+
+        <div class="row" style="margin-top:12px;">
+          <button class="primary" id="btnCalc">Calculate</button>
+          <button id="btnAdd">Add to log</button>
+        </div>
+
+        <div class="kpis" style="margin-top:12px;">
+          <div class="kpi">
+            <div class="v" id="k_gph">—</div>
+            <div class="t" id="ui_gph">£/hour (gross)</div>
+          </div>
+          <div class="kpi">
+            <div class="v" id="k_cost">—</div>
+            <div class="t" id="ui_cost">Cost estimate</div>
+          </div>
+          <div class="kpi">
+            <div class="v" id="k_net">—</div>
+            <div class="t" id="ui_net">Net (est.)</div>
+          </div>
+          <div class="kpi">
+            <div class="v" id="k_nph">—</div>
+            <div class="t" id="ui_nph">£/hour (net est.)</div>
+          </div>
+        </div>
+
+        <div class="footer" id="ui_note">
+          Note: this MVP stores data only in your browser (localStorage). No cloud, no account.
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="card">
+        <div class="lock">
+          <h2 id="ui_log">Today log</h2>
+          <button class="danger" id="btnClear" style="width:auto;">Clear</button>
+        </div>
+
+        <div class="kpis" style="margin-top:10px; grid-template-columns:repeat(3,1fr);">
+          <div class="kpi">
+            <div class="v" id="d_orders">0</div>
+            <div class="t" id="ui_orders">Orders</div>
+          </div>
+          <div class="kpi">
+            <div class="v" id="d_gross">£0.00</div>
+            <div class="t" id="ui_gross">Gross</div>
+          </div>
+          <div class="kpi">
+            <div class="v" id="d_net">£0.00</div>
+            <div class="t" id="ui_net2">Net (est.)</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px; overflow:auto; max-height: 340px;">
+          <table>
+            <thead>
+              <tr>
+                <th id="ui_t_time">Time</th>
+                <th class="right" id="ui_t_pay">Pay</th>
+                <th class="right" id="ui_t_mi">Miles</th>
+                <th class="right" id="ui_t_net">Net</th>
+                <th class="right" id="ui_t_nph">£/h</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="card locked" style="margin-top:12px;">
+          <h2 id="ui_pro">PRO (locked in MVP)</h2>
+          <div class="tiny" id="ui_pro_list">
+            • PDF reports • Export Excel/CSV • Tax estimate • Multi-month history • Cloud sync
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <button disabled id="btnExport">Export</button>
+            <button disabled id="btnPdf">PDF</button>
+          </div>
+          <div class="tiny" style="margin-top:10px;">
+            <a class="link" href="#" id="paypalLink">Set your PayPal link here later</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/** ========= i18n (basic) ========= */
+const TXT = {
+  en: {
+    title: "Driver Calc (MVP)",
+    sub: "Fast order profitability + simple log (local only)",
+    lang: "Language",
+    calc: "Order calculator",
+    pay_label: "Order pay (£)",
+    time_label: "Order time (minutes)",
+    dist_label: "Distance (miles)",
+    cost_label: "Cost per mile (£)",
+    fixed_label: "Fixed cost per order (£) (optional)",
+    target_label: "Minimum £/hour target",
+    gph: "£/hour (gross)",
+    cost: "Cost estimate",
+    net: "Net (est.)",
+    nph: "£/hour (net est.)",
+    note: "Note: this MVP stores data only in your browser (localStorage). No cloud, no account.",
+    log: "Today log",
+    orders: "Orders",
+    gross: "Gross",
+    net2: "Net (est.)",
+    t_time: "Time",
+    t_pay: "Pay",
+    t_mi: "Miles",
+    t_net: "Net",
+    t_nph: "£/h",
+    pro: "PRO (locked in MVP)",
+    pro_list: "• PDF reports • Export Excel/CSV • Tax estimate • Multi-month history • Cloud sync",
+    btn_calc: "Calculate",
+    btn_add: "Add to log",
+    btn_clear: "Clear",
+    paypal: "Set your PayPal link here later",
+    bad_input: "Fill pay + minutes. Miles and costs can be 0.",
+  },
+  pt: {
+    title: "Calculadora Driver (MVP)",
+    sub: "Rentabilidade rápida + registo simples (só local)",
+    lang: "Língua",
+    calc: "Calculadora por pedido",
+    pay_label: "Valor do pedido (£)",
+    time_label: "Tempo do pedido (minutos)",
+    dist_label: "Distância (milhas)",
+    cost_label: "Custo por milha (£)",
+    fixed_label: "Custo fixo por pedido (£) (opcional)",
+    target_label: "Alvo mínimo £/hora",
+    gph: "£/hora (bruto)",
+    cost: "Custo estimado",
+    net: "Líquido (est.)",
+    nph: "£/hora (líquido est.)",
+    note: "Nota: este MVP guarda dados só no teu browser (localStorage). Sem cloud, sem conta.",
+    log: "Registo de hoje",
+    orders: "Pedidos",
+    gross: "Bruto",
+    net2: "Líquido (est.)",
+    t_time: "Hora",
+    t_pay: "Valor",
+    t_mi: "Milhas",
+    t_net: "Líquido",
+    t_nph: "£/h",
+    pro: "PRO (bloqueado no MVP)",
+    pro_list: "• Relatórios PDF • Export Excel/CSV • Estimativa de imposto • Histórico • Cloud",
+    btn_calc: "Calcular",
+    btn_add: "Adicionar ao registo",
+    btn_clear: "Limpar",
+    paypal: "Meter o teu link PayPal mais tarde",
+    bad_input: "Preenche valor + minutos. Milhas e custos podem ser 0.",
+  },
+  es: {
+    title: "Calculadora Driver (MVP)",
+    sub: "Rentabilidad rápida + registro simple (solo local)",
+    lang: "Idioma",
+    calc: "Calculadora por pedido",
+    pay_label: "Pago del pedido (£)",
+    time_label: "Tiempo del pedido (minutos)",
+    dist_label: "Distancia (millas)",
+    cost_label: "Coste por milla (£)",
+    fixed_label: "Coste fijo por pedido (£) (opcional)",
+    target_label: "Objetivo mínimo £/hora",
+    gph: "£/hora (bruto)",
+    cost: "Coste estimado",
+    net: "Neto (est.)",
+    nph: "£/hora (neto est.)",
+    note: "Nota: este MVP guarda datos solo en tu navegador (localStorage). Sin nube, sin cuenta.",
+    log: "Registro de hoy",
+    orders: "Pedidos",
+    gross: "Bruto",
+    net2: "Neto (est.)",
+    t_time: "Hora",
+    t_pay: "Pago",
+    t_mi: "Millas",
+    t_net: "Neto",
+    t_nph: "£/h",
+    pro: "PRO (bloqueado en MVP)",
+    pro_list: "• PDF • Export Excel/CSV • Impuestos • Historial • Nube",
+    btn_calc: "Calcular",
+    btn_add: "Añadir al registro",
+    btn_clear: "Borrar",
+    paypal: "Poner tu enlace PayPal más tarde",
+    bad_input: "Rellena pago + minutos. Millas y costes pueden ser 0.",
+  },
+  fr: {
+    title: "Calcul Driver (MVP)",
+    sub: "Rentabilité rapide + journal simple (local فقط)",
+    lang: "Langue",
+    calc: "Calcul par course",
+    pay_label: "Gain de la course (£)",
+    time_label: "Temps (minutes)",
+    dist_label: "Distance (miles)",
+    cost_label: "Coût par mile (£)",
+    fixed_label: "Coût fixe par course (£) (optionnel)",
+    target_label: "Objectif minimum £/heure",
+    gph: "£/heure (brut)",
+    cost: "Coût estimé",
+    net: "Net (est.)",
+    nph: "£/heure (net est.)",
+    note: "Note : ce MVP stocke les données uniquement dans le navigateur (localStorage). Pas de cloud, pas de compte.",
+    log: "Journal d’aujourd’hui",
+    orders: "Courses",
+    gross: "Brut",
+    net2: "Net (est.)",
+    t_time: "Heure",
+    t_pay: "Gain",
+    t_mi: "Miles",
+    t_net: "Net",
+    t_nph: "£/h",
+    pro: "PRO (verrouillé dans MVP)",
+    pro_list: "• PDF • Export Excel/CSV • Taxes • Historique • Cloud",
+    btn_calc: "Calculer",
+    btn_add: "Ajouter",
+    btn_clear: "Effacer",
+    paypal: "Ajouter ton lien PayPal plus tard",
+    bad_input: "Renseigne gain + minutes. Miles et coûts peuvent être 0.",
+  }
+};
+
+function money(n){
+  if (!isFinite(n)) return "—";
+  return "£" + n.toFixed(2);
+}
+function nowTime(){
+  const d = new Date();
+  return d.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+}
+
+const $ = (id)=>document.getElementById(id);
+
+function setLang(lang){
+  const t = TXT[lang] || TXT.en;
+  $("ui_title").textContent = t.title;
+  $("ui_sub").textContent = t.sub;
+  $("ui_lang").textContent = t.lang;
+  $("ui_calc").textContent = t.calc;
+  $("ui_pay_label").textContent = t.pay_label;
+  $("ui_time_label").textContent = t.time_label;
+  $("ui_dist_label").textContent = t.dist_label;
+  $("ui_cost_label").textContent = t.cost_label;
+  $("ui_fixed_label").textContent = t.fixed_label;
+  $("ui_target_label").textContent = t.target_label;
+  $("ui_gph").textContent = t.gph;
+  $("ui_cost").textContent = t.cost;
+  $("ui_net").textContent = t.net;
+  $("ui_nph").textContent = t.nph;
+  $("ui_note").textContent = t.note;
+  $("ui_log").textContent = t.log;
+  $("ui_orders").textContent = t.orders;
+  $("ui_gross").textContent = t.gross;
+  $("ui_net2").textContent = t.net2;
+  $("ui_t_time").textContent = t.t_time;
+  $("ui_t_pay").textContent = t.t_pay;
+  $("ui_t_mi").textContent = t.t_mi;
+  $("ui_t_net").textContent = t.t_net;
+  $("ui_t_nph").textContent = t.t_nph;
+  $("ui_pro").textContent = t.pro;
+  $("ui_pro_list").textContent = t.pro_list;
+  $("btnCalc").textContent = t.btn_calc;
+  $("btnAdd").textContent = t.btn_add;
+  $("btnClear").textContent = t.btn_clear;
+  $("paypalLink").textContent = t.paypal;
+
+  localStorage.setItem("dc_lang", lang);
+}
+
+/** ========= calc ========= */
+function calc(){
+  const pay = parseFloat($("pay").value || "0");
+  const mins = parseFloat($("mins").value || "0");
+  const miles = parseFloat($("miles").value || "0");
+  const cpm = parseFloat($("cpm").value || "0");
+  const fixed = parseFloat($("fixed").value || "0");
+  const target = parseFloat($("target").value || "0");
+
+  if (!(pay > 0) || !(mins > 0)) return { ok:false };
+
+  const hours = mins / 60;
+  const grossPerHour = pay / hours;
+  const cost = (miles * cpm) + fixed;
+  const net = pay - cost;
+  const netPerHour = net / hours;
+
+  const pass = (target > 0) ? (netPerHour >= target) : null;
+
+  return { ok:true, pay, mins, miles, cpm, fixed, target, grossPerHour, cost, net, netPerHour, pass };
+}
+
+function renderKPIs(r){
+  if (!r.ok){
+    $("k_gph").textContent = "—";
+    $("k_cost").textContent = "—";
+    $("k_net").textContent = "—";
+    $("k_nph").textContent = "—";
+    $("k_nph").className = "v";
+    return;
+  }
+  $("k_gph").textContent = money(r.grossPerHour).replace("£","£") + "/h";
+  $("k_cost").textContent = money(r.cost);
+  $("k_net").textContent = money(r.net);
+  $("k_nph").textContent = money(r.netPerHour).replace("£","£") + "/h";
+
+  // color logic on net/hour vs target
+  $("k_nph").className = "v";
+  if (r.pass === true) $("k_nph").classList.add("ok");
+  if (r.pass === false) $("k_nph").classList.add("bad");
+}
+
+/** ========= log ========= */
+function keyToday(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const da = String(d.getDate()).padStart(2,"0");
+  return `dc_log_${y}-${m}-${da}`;
+}
+
+function getLog(){
+  const raw = localStorage.getItem(keyToday());
+  try { return raw ? JSON.parse(raw) : []; } catch { return []; }
+}
+function setLog(items){
+  localStorage.setItem(keyToday(), JSON.stringify(items));
+}
+
+function renderLog(){
+  const items = getLog();
+  const tbody = $("tbody");
+  tbody.innerHTML = "";
+
+  let gross = 0, net = 0;
+
+  for (const it of items){
+    gross += it.pay;
+    net += it.net;
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${it.time}</td>
+      <td class="right">£${it.pay.toFixed(2)}</td>
+      <td class="right">${it.miles.toFixed(1)}</td>
+      <td class="right">£${it.net.toFixed(2)}</td>
+      <td class="right">${it.netPerHour.toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  $("d_orders").textContent = String(items.length);
+  $("d_gross").textContent = "£" + gross.toFixed(2);
+  $("d_net").textContent = "£" + net.toFixed(2);
+}
+
+/** ========= wiring ========= */
+$("btnCalc").addEventListener("click", ()=>{
+  const r = calc();
+  const lang = localStorage.getItem("dc_lang") || "en";
+  if (!r.ok){
+    alert((TXT[lang]||TXT.en).bad_input);
+    return;
+  }
+  renderKPIs(r);
+});
+
+$("btnAdd").addEventListener("click", ()=>{
+  const r = calc();
+  const lang = localStorage.getItem("dc_lang") || "en";
+  if (!r.ok){
+    alert((TXT[lang]||TXT.en).bad_input);
+    return;
+  }
+  renderKPIs(r);
+
+  const items = getLog();
+  items.unshift({
+    time: nowTime(),
+    pay: r.pay,
+    mins: r.mins,
+    miles: r.miles,
+    cost: r.cost,
+    net: r.net,
+    netPerHour: r.netPerHour
+  });
+  setLog(items);
+  renderLog();
+});
+
+$("btnClear").addEventListener("click", ()=>{
+  setLog([]);
+  renderLog();
+});
+
+$("langSel").addEventListener("change", (e)=>setLang(e.target.value));
+
+(function init(){
+  const saved = localStorage.getItem("dc_lang") || "en";
+  $("langSel").value = saved;
+  setLang(saved);
+  renderLog();
+})();
+</script>
+</body>
+</html>
+
