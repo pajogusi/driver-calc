@@ -514,6 +514,44 @@ $("langSel").addEventListener("change", (e)=>setLang(e.target.value));
   renderLog();
 })();
 </script>
+<!-- ===== SUMMARY BLOCK (SAFE INSERT) ===== -->
+<div class="wrap">
+  <div class="card" style="margin-top:12px;">
+    <h2>Summary</h2>
+
+    <div class="kpis" style="grid-template-columns:repeat(4,1fr);">
+      <div class="kpi">
+        <div class="v" id="s_day_orders">0</div>
+        <div class="t">Day orders</div>
+      </div>
+      <div class="kpi">
+        <div class="v" id="s_day_gross">£0.00</div>
+        <div class="t">Day gross</div>
+      </div>
+      <div class="kpi">
+        <div class="v" id="s_day_net">£0.00</div>
+        <div class="t">Day net (est.)</div>
+      </div>
+      <div class="kpi">
+        <div class="v" id="s_day_avg">£0.00</div>
+        <div class="t">Avg £/hour (day)</div>
+      </div>
+    </div>
+
+    <div class="kpis" style="margin-top:10px; grid-template-columns:repeat(2,1fr);">
+      <div class="kpi">
+        <div class="v" id="s_week_gross">£0.00</div>
+        <div class="t">Last 7 days gross</div>
+      </div>
+      <div class="kpi">
+        <div class="v" id="s_week_net">£0.00</div>
+        <div class="t">Last 7 days net (est.)</div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ===== END SUMMARY BLOCK ===== -->
+
 </body>
 </html>
 
