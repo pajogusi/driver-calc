@@ -123,3 +123,49 @@ input{
 }
 .status.ok{ color:#7CFFB2; }
 .status.bad{ color:#FF7C7C; }
+/* PRO modal */
+.modal.hidden { display: none; }
+.modal { position: fixed; inset: 0; z-index: 9999; }
+.modal__backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.55); }
+.modal__card {
+  position: relative;
+  width: min(720px, calc(100% - 24px));
+  margin: 60px auto;
+  background: #0f131a;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  padding: 14px;
+}
+.modal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.modal__body { padding-top: 12px; }
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+@media (max-width: 640px){
+  .grid2 { grid-template-columns: 1fr; }
+}
+
+.kpi {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 10px;
+}
+.kpi__label { opacity: .75; font-size: 12px; }
+.kpi__value { font-size: 18px; font-weight: 700; margin-top: 4px; }
+
+.row { display: grid; gap: 6px; margin-bottom: 10px; }
+.label { font-size: 12px; opacity: .8; }
+.input { width: 100%; padding: 10px; border-radius: 10px; border: 1px solid rgba(255,255,255,.12); background: #0b0f14; color: #fff; }
+.muted { opacity: .7; font-size: 12px; }
