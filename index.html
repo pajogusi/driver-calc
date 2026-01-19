@@ -90,18 +90,48 @@
       </div>
     </section>
 
-    <!-- PRO -->
-    <section class="card locked">
-      <h2>PRO</h2>
-      <ul>
-        <li>Weekly / monthly reports</li>
-        <li>Fuel & maintenance costs</li>
-        <li>CSV / PDF export</li>
-        <li>Tax support</li>
-      </ul>
+<!-- PRO -->
+<section class="card locked" id="proCard">
+  <div class="proHead">
+    <h2>PRO</h2>
+    <div class="pill" id="proPill">LOCKED</div>
+  </div>
 
-      <button disabled>Unlock PRO (PayPal)</button>
-    </section>
+  <p class="muted" id="ui_pro_note">
+    PRO is trust-based (no account, no cloud). Unlock is stored on this device/browser only.
+  </p>
+
+  <div class="proPay">
+    <a class="btn" id="paypalBtn" href="#" target="_blank" rel="noopener">
+      Pay £2 via PayPal
+    </a>
+  </div>
+
+  <div class="proUnlock">
+    <label for="proCode" class="muted">PRO code</label>
+    <div class="row">
+      <input id="proCode" type="text" placeholder="DC2-XXXX-XXXX-XXXX" autocomplete="off">
+      <button class="btn" id="btnUnlock">Activate</button>
+      <button class="btn ghost" id="btnLock">Lock</button>
+    </div>
+    <div class="status" id="proStatus">PRO is locked.</div>
+  </div>
+
+  <hr class="sep">
+
+  <ul class="muted">
+    <li>Weekly / monthly reports</li>
+    <li>Fuel & maintenance costs</li>
+    <li>CSV / PDF export</li>
+    <li>Tax support</li>
+  </ul>
+
+  <div class="row" style="margin-top:10px;">
+    <button class="btn" id="btnProReport" disabled>Open reports</button>
+    <button class="btn" id="btnProExport" disabled>Export CSV</button>
+  </div>
+</section>
+
 
   </main>
 
