@@ -47,3 +47,79 @@ footer {
   opacity:0.6;
   padding:12px;
 }
+/* ===== PRO Unlock UI ===== */
+.btn{
+  background:#1e90ff;
+  color:#fff;
+  border:0;
+  padding:10px 12px;
+  border-radius:10px;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+.btn.ghost{
+  background:transparent;
+  border:1px solid #2b2f3a;
+  color:#cfd3dc;
+}
+
+input{
+  background:#0f1116;
+  color:#fff;
+  border:1px solid #2b2f3a;
+  border-radius:10px;
+  padding:10px 12px;
+  width:100%;
+  min-width:180px;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.muted{ opacity:.75; }
+
+.sep{
+  border:0;
+  height:1px;
+  background:#232733;
+  margin:12px 0;
+}
+
+.proHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.pill{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid #2b2f3a;
+  background:#12141a;
+  color:#cfd3dc;
+}
+
+#proCard.locked{ opacity:.55; }
+#proCard.unlocked{ opacity:1; }
+
+.status{
+  margin-top:8px;
+  font-size:13px;
+  opacity:.85;
+}
+.status.ok{ color:#7CFFB2; }
+.status.bad{ color:#FF7C7C; }
