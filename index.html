@@ -140,5 +140,59 @@
   </footer>
 
   <script src="app.js"></script>
+<!-- PRO Reports modal -->
+<div id="proModal" class="modal hidden" aria-hidden="true">
+  <div class="modal__backdrop" id="proModalClose"></div>
+
+  <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="proModalTitle">
+    <div class="modal__head">
+      <h3 id="proModalTitle">PRO Reports</h3>
+      <button id="proModalX" class="btn btn--ghost" type="button">Close</button>
+    </div>
+
+    <div class="modal__body">
+      <div class="row">
+        <label class="label">Period</label>
+        <select id="proPeriod" class="input">
+          <option value="week">Last 7 days</option>
+          <option value="month">This month</option>
+          <option value="all">All time</option>
+        </select>
+      </div>
+
+      <div class="grid2">
+        <div class="kpi">
+          <div class="kpi__label">Orders</div>
+          <div class="kpi__value" id="r_orders">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">Time (minutes)</div>
+          <div class="kpi__value" id="r_minutes">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">Gross</div>
+          <div class="kpi__value" id="r_gross">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">Costs (est.)</div>
+          <div class="kpi__value" id="r_costs">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">Net (est.)</div>
+          <div class="kpi__value" id="r_net">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi__label">£/hour (net est.)</div>
+          <div class="kpi__value" id="r_nph">—</div>
+        </div>
+      </div>
+
+      <p class="muted" style="margin-top:12px">
+        Reports are calculated from your local log (this device/browser only).
+      </p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
