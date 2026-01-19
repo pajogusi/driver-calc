@@ -1,0 +1,49 @@
+body {
+  margin:0;
+  font-family: system-ui, sans-serif;
+  background:#0b0c10;
+  color:#eee;
+}
+
+.top {
+  display:flex;
+  justify-content:space-between;
+  padding:12px;
+  border-bottom:1px solid #222;
+}
+
+.wrap {
+  padding:12px;
+}
+
+.grid {
+  display:grid;
+  gap:12px;
+}
+
+.card {
+  background:#12141a;
+  border-radius:12px;
+  padding:12px;
+}
+
+.kpis {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.locked {
+  opacity:0.5;
+}
+
+table {
+  width:100%;
+  font-size:12px;
+}
+
+footer {
+  text-align:center;
+  opacity:0.6;
+  padding:12px;
+}
