@@ -75,9 +75,7 @@ const PAYPAL_URL = "https://www.paypal.me/TEU_LINK/2"; // <-- ALTERA ISTO
 
 // 2) Lista de hashes SHA-256 dos códigos válidos (um por linha)
 //    Não metas os códigos em texto aqui, mete só os hashes.
-const PRO_CODE_HASHES = [
-  // exemplo (apaga depois): "0123abcd..."
-];
+const PRO_CODE_HASHES = ["b472c978d30c88c877037275f7c96cbf46a81b9570bad4a8ba6619375e59606e"];
 
 // 3) Chave local para o browser
 const PRO_KEY = "dc_pro_unlocked_v1";
