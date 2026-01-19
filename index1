@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Driver Calc</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="dot"></span>
+      <div>
+        <h1 id="ui_title">Driver Calc</h1>
+        <p id="ui_sub">Neutral calculator for delivery drivers</p>
+      </div>
+    </div>
+
+    <select id="langSel">
+      <option value="en">EN</option>
+      <option value="pt">PT</option>
+      <option value="es">ES</option>
+      <option value="fr">FR</option>
+    </select>
+  </header>
+
+  <main class="wrap grid">
+    <!-- CALCULATOR -->
+    <section class="card">
+      <h2 id="ui_calc">Order calculator</h2>
+
+      <label>Order pay (£)</label>
+      <input id="pay" type="number" step="0.01">
+
+      <label>Time (minutes)</label>
+      <input id="mins" type="number">
+
+      <label>Distance</label>
+      <input id="dist" type="number" step="0.1">
+
+      <label>Cost per mile / km (£)</label>
+      <input id="cpm" type="number" step="0.01">
+
+      <button id="btnCalc">Calculate</button>
+      <button id="btnAdd">Add to log</button>
+
+      <div class="kpis">
+        <div><strong id="k_gph">—</strong><span>£/hour gross</span></div>
+        <div><strong id="k_cost">—</strong><span>Cost est.</span></div>
+        <div><strong id="k_net">—</strong><span>Net est.</span></div>
+        <div><strong id="k_nph">—</strong><span>£/hour net</span></div>
+      </div>
+    </section>
+
+    <!-- TODAY LOG -->
+    <section class="card">
+      <h2 id="ui_log">Today</h2>
+
+      <div class="kpis">
+        <div><strong id="d_orders">0</strong><span>Orders</span></div>
+        <div><strong id="d_gross">£0.00</strong><span>Gross</span></div>
+        <div><strong id="d_net">£0.00</strong><span>Net est.</span></div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Pay</th>
+            <th>Net</th>
+            <th>£/h</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </section>
+    <!-- SUMMARY -->
+    <section class="card">
+      <h2>Summary</h2>
+
+      <div class="kpis">
+        <div><strong id="s_day_orders">0</strong><span>Day orders</span></div>
+        <div><strong id="s_day_net">£0.00</strong><span>Day net</span></div>
+        <div><strong id="s_day_avg">£0.00</strong><span>Avg £/h day</span></div>
+      </div>
+
+      <div class="kpis">
+        <div><strong id="s_week_net">£0.00</strong><span>Last 7 days</span></div>
+      </div>
+    </section>
+
+    <!-- PRO -->
+    <section class="card locked">
+      <h2>PRO</h2>
+      <ul>
+        <li>Weekly / monthly reports</li>
+        <li>Fuel & maintenance costs</li>
+        <li>CSV / PDF export</li>
+        <li>Tax support</li>
+      </ul>
+
+      <button disabled>Unlock PRO (PayPal)</button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>This tool shows numbers. Decisions are always yours.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
